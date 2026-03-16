@@ -2,7 +2,7 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\User;
+use App\Modules\Core\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -23,7 +23,9 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input): User
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['nullable', 'string', 'max:255'],
+            'first_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['nullable', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -32,12 +34,38 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
-        ])->validate();
+        ])->after(function ($validator) use ($input) {
+            if (empty($input['name']) && empty($input['first_name']) && empty($input['last_name'])) {
+                $validator->errors()->add('name', __('Le nom est requis.'));
+            }
+        })->validate();
+
+        [$firstName, $lastName] = $this->resolveNames($input);
 
         return User::create([
-            'name' => $input['name'],
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'is_active' => true,
         ]);
+    }
+
+    /**
+     * @param  array<string, string>  $input
+     * @return array{0:string,1:string}
+     */
+    private function resolveNames(array $input): array
+    {
+        if (! empty($input['first_name']) || ! empty($input['last_name'])) {
+            return [trim((string) ($input['first_name'] ?? 'Utilisateur')), trim((string) ($input['last_name'] ?? 'ERP'))];
+        }
+
+        $name = trim((string) ($input['name'] ?? 'Utilisateur ERP'));
+        $parts = preg_split('/\s+/', $name) ?: [];
+        $first = array_shift($parts) ?: 'Utilisateur';
+        $last = implode(' ', $parts) ?: 'ERP';
+
+        return [$first, $last];
     }
 }
