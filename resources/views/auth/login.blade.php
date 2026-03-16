@@ -21,26 +21,42 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <form id="login-form" method="POST" action="{{ route('login') }}" autocomplete="on">
             @csrf
 
             <div style="margin-bottom:10px;">
                 <label for="email">Email</label><br>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus style="width:100%;padding:8px;">
+                <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    required
+                    autofocus
+                    autocomplete="email"
+                    style="width:100%;padding:8px;"
+                >
             </div>
 
             <div style="margin-bottom:10px;">
                 <label for="password">Mot de passe</label><br>
-                <input id="password" type="password" name="password" required style="width:100%;padding:8px;">
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                    style="width:100%;padding:8px;"
+                >
             </div>
 
             <div style="margin-bottom:14px;">
-                <label>
-                    <input type="checkbox" name="remember"> Se souvenir de moi
+                <label for="remember">
+                    <input id="remember" type="checkbox" name="remember" autocomplete="off"> Se souvenir de moi
                 </label>
             </div>
 
-            <button type="submit" style="padding:8px 14px;">Se connecter</button>
+            <button id="login-submit" name="login-submit" type="submit" style="padding:8px 14px;">Se connecter</button>
         </form>
     </main>
 </body>
