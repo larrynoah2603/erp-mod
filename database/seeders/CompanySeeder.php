@@ -55,7 +55,6 @@ class CompanySeeder extends Seeder
             'is_active' => true,
         ]);
         
-        $admin->assignRole('admin');
         
         // Créer un manager
         $manager = User::create([
@@ -72,7 +71,6 @@ class CompanySeeder extends Seeder
             'is_active' => true,
         ]);
         
-        $manager->assignRole('manager');
         
         // Créer un employé
         $employee = User::create([
@@ -89,6 +87,5 @@ class CompanySeeder extends Seeder
             'is_active' => true,
         ]);
         
-        $employee->assignRole('employee');
     }
 }

@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Modules\Core\Models\Role;
+use App\Modules\Core\Models\Permission;
 use App\Modules\Core\Models\Company;
+use App\Modules\Core\Models\User;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -47,7 +48,7 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'web']);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
         // Créer les rôles pour chaque entreprise
@@ -92,6 +93,10 @@ class RolePermissionSeeder extends Seeder
                 'view_stock',
                 'view_hr',
             ]);
+            // Assigner les rôles aux utilisateurs de démonstration de l'entreprise
+            User::where('company_id', $company->id)->where('email', 'admin@demo.com')->first()?->syncRoles([$adminRole]);
+            User::where('company_id', $company->id)->where('email', 'manager@demo.com')->first()?->syncRoles([$managerRole]);
+            User::where('company_id', $company->id)->where('email', 'employee@demo.com')->first()?->syncRoles([$employeeRole]);
         }
     }
 }
