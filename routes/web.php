@@ -13,3 +13,12 @@ Route::get('/', function () {
 
     return view('welcome');
 })->name('home');
+
+
+Route::get('/home', function () {
+    if (Route::has('dashboard')) {
+        return redirect()->route('dashboard');
+    }
+
+    return redirect()->route('home');
+})->name('legacy.home');
