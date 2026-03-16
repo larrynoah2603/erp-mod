@@ -58,4 +58,4 @@ class Payroll extends Model
     {
         return $this->hasMany(PayrollItem::class);
     }
-}s
+}
