@@ -63,9 +63,7 @@ class ModuleServiceProvider extends ServiceProvider
         foreach ($modules as $module) {
             $routesPath = base_path("routes/modules/" . strtolower($module) . ".php");
             if (file_exists($routesPath)) {
-                Route::middleware('web')
-                    ->namespace("App\\Modules\\{$module}\\Http\\Controllers")
-                    ->group($routesPath);
+                Route::middleware('web')->group($routesPath);
             }
         }
     }
