@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Modules\Core\Models\User as CoreUser;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -22,7 +23,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->forceCoreUserModelForAuth();
         $this->guardSessionDriverAgainstMissingTable();
+    }
+
+    private function forceCoreUserModelForAuth(): void
+    {
+        Config::set('auth.providers.users.model', CoreUser::class);
     }
 
     private function guardSessionDriverAgainstMissingTable(): void
