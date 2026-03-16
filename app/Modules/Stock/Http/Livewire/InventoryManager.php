@@ -12,7 +12,7 @@ class InventoryManager extends Component
     use WithPagination;
     
     public $search = '';
-    public $category = '';
+    public $categoryFilter = '';
     public $stockStatus = '';
     public $sortField = 'name';
     public $sortDirection = 'asc';
@@ -52,8 +52,8 @@ class InventoryManager extends Component
                       ->orWhere('barcode', 'like', '%' . $this->search . '%');
                 });
             })
-            ->when($this->category, function ($query) {
-                $query->where('category', $this->category);
+            ->when($this->categoryFilter, function ($query) {
+                $query->where('category', $this->categoryFilter);
             })
             ->when($this->stockStatus === 'low', function ($query) {
                 $query->lowStock();
