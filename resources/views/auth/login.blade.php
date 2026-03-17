@@ -60,6 +60,8 @@
 
         <div class="hint">
             Comptes de démonstration : admin@demo.com / password, manager@demo.com / password.
+            <br>
+            Pas encore de compte ? <a href="{{ route('register') }}">Créer un compte</a>.
         </div>
     </main>
 </div>

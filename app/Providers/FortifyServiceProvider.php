@@ -42,6 +42,11 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
 
+
+        Fortify::registerView(function () {
+            return view('auth.register');
+        });
+
         Fortify::authenticateUsing(function (Request $request) {
             $email = Str::lower(trim($request->string('email')->toString()));
             $password = $request->string('password')->toString();

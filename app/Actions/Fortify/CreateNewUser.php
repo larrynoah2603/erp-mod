@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Modules\Core\Models\Company;
 use App\Modules\Core\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -42,7 +43,13 @@ class CreateNewUser implements CreatesNewUsers
 
         [$firstName, $lastName] = $this->resolveNames($input);
 
+        $company = Company::query()->firstOrCreate(
+            ['email' => 'contact@demo.com'],
+            ['name' => 'Entreprise Demo', 'legal_name' => 'Demo SARL', 'is_active' => true]
+        );
+
         return User::create([
+            'company_id' => $company->id,
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email' => $input['email'],
